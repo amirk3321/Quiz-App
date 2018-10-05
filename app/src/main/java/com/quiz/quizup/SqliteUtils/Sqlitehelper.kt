@@ -29,20 +29,6 @@ class Sqlitehelper : SQLiteOpenHelper {
         db!!.execSQL(DROP_TABLE)
         onCreate(db)
     }
-//    fun onCreateQuestion(){
-//        val qustion1=QuestionModel("pakistan name start","a","K","P","C",3)
-//        onInsertData(qustion1)
-//        val qustion2=QuestionModel("Java is","programming language","concept","not programming language","machine language",1)
-//        onInsertData(qustion2)
-//        val qustion3=QuestionModel("Int data take memory in ram","1 byte","4 byte","16 byte","20 byte",2)
-//        onInsertData(qustion3)
-//        val qustion4=QuestionModel("OOP Stand for","over all programming","one sided password","object oriented programming","object open programming",3)
-//
-//        onInsertData(qustion4)
-//        val qustion5=QuestionModel("Html is","Programming language","Markup Language","machine language","server side scripting language",2)
-//
-//        onInsertData(qustion5)
-//    }
     fun onInsertData(question : QuestionModel){
         db=this.writableDatabase
         val v=ContentValues()
@@ -74,5 +60,9 @@ class Sqlitehelper : SQLiteOpenHelper {
         }
         cursor.close()
         return questionList
+    }
+    fun onDelete(id : String){
+        db=this.writableDatabase
+        db.delete(TABLE,null, arrayOf(id))
     }
 }

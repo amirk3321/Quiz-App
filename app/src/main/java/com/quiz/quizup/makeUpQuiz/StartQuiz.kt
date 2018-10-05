@@ -1,11 +1,14 @@
 package com.quiz.quizup.makeUpQuiz
 
 import android.app.Activity
+import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
+import com.quiz.quizup.AppConstent.Constent
 import com.quiz.quizup.AppConstent.toast
+import com.quiz.quizup.MainActivity
 import com.quiz.quizup.R
 import com.quiz.quizup.SqliteUtils.Sqlitehelper
 import com.quiz.quizup.model.QuestionModel
@@ -20,7 +23,7 @@ class StartQuiz : Activity() {
     private var mCounterQuestion=0
     private var mTotalQuestion=0
     private var mAnswer=true
-
+    private var mBackPressTime=0L
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -31,7 +34,7 @@ class StartQuiz : Activity() {
         mQuestionList=mDb.ongetQuestion()
         mTotalQuestion=mQuestionList.size
         mListColorState=option1.textColors
-        //Collections.shuffle(mQuestionList)
+        Collections.shuffle(mQuestionList)
 
        onShowNextQuestion()
         finish.setOnClickListener {
@@ -43,7 +46,6 @@ class StartQuiz : Activity() {
                    toast.msg("Please Select One Option", this)
            }else
                onShowNextQuestion()
-            toast.msg("count : $mTotalQuestion",this)
         }
 
     }
@@ -97,11 +99,11 @@ class StartQuiz : Activity() {
         optionGrp.clearCheck()
         if (mCounterQuestion < mTotalQuestion){
             mQuestionCurrent=mQuestionList[mCounterQuestion]
-            question.text="${mQuestionCurrent.question}"
-            option1.text="${mQuestionCurrent.option1}"
-            option2.text="${mQuestionCurrent.option2}"
-            option3.text="${mQuestionCurrent.option3}"
-            option4.text="${mQuestionCurrent.option4}"
+            question.text=mQuestionCurrent.question
+            option1.text=mQuestionCurrent.option1
+            option2.text=mQuestionCurrent.option2
+            option3.text=mQuestionCurrent.option3
+            option4.text=mQuestionCurrent.option4
             mCounterQuestion++
             total_question_tv.text="Question $mCounterQuestion / $mTotalQuestion"
             mAnswer=false
@@ -112,6 +114,18 @@ class StartQuiz : Activity() {
     }
 
     private fun onFinish() {
+        val scoreIntent=Intent()
+        scoreIntent.putExtra(Constent.SCORE_EXTRA,mScoure)
+        setResult(RESULT_OK,scoreIntent)
         finish()
+    }
+
+    override fun onBackPressed() {
+        if (mBackPressTime+2000>System.currentTimeMillis())
+            onFinish()
+        else
+            toast.msg("Press back simultaneously ",this)
+
+        mBackPressTime=System.currentTimeMillis()
     }
 }
