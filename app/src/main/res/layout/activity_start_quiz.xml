@@ -30,7 +30,7 @@
         android:text="Total Qustion: 0/0" />
 
     <TextView
-        android:id="@+id/time"
+        android:id="@+id/counttime"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
